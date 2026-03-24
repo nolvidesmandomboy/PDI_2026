@@ -62,15 +62,14 @@ Raster en sortie : **Raster de valeurs d'écart-type (Raster_ET)**
 
 ## 3.2 Normalisation des valeurs d'écart type par une fonction sigmoïde
 
-Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transforme les valeurs d'écart type en un gradient continu entre 0 et 1.
-
+Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transforme les valeurs d'écart type en un gradient continu entre 0 et 1. 
 Outil utilisé : **Calculatrice Raster**
 
-$$C(\text{Raster-ET}) = \frac{1}{1 + e^{-a \cdot (x - k)}}$$
+$$C(\text{Raster_ET}) = \frac{1}{1 + e^{-a \cdot (x - k)}}$$
 
-Avec :
-- $a = 6$ : coefficient de pente de la sigmoïde
-- $k = 4$ : valeur d'écart-type dans les zones de transition
+Avec les valeurs par défaut :
+- $a = 6$ : coefficient de pente de la sigmoïde. Le paramètre par défaut **a = 6** détermine la brutalité de la transition ; plus a est grand, plus la transition est abrupte, plus les zones de transition sont petites. **6** a été choisi pour obtenir un lissage très différencié.
+- $k = 4$ : valeur d'écart-type dans les zones de transition. Le paramètre par défaut **k** correspond au seuil autour duquel la sigmoïde bascule de 0 vers 1, c'est-à-dire, où la transition entre le lissage fort et l'absence de lissage commence.
 
 Raster en sortie : **raster normalisé entre 0 et 1**
 
