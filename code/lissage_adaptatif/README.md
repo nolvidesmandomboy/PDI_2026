@@ -96,7 +96,7 @@ Paramètres :
 - Type d'unité : **cellule**
 - Type de statistiques : **Moyenne**
 
-Sortie : **MNT_lisse**
+Sortie : **$\text{MNT}_{\text{lissé}}$**
 
 ---
 
@@ -114,18 +114,18 @@ La combinaison finale repose sur la pondération suivante :
 $$\text{MNT-FINAL} = A \cdot C + (1 - C) \cdot B$$
 
 Avec :
-- A : **MNT d’origine**  
-- B : **MNT lissé (3.3)**
+- A : **$\text{MNT}_{\text{origine}}$**  
+- B : **$\text{MNT}_{\text{lissé}}$ (3.3)**
 - C : **raster d’écart-type normalisé (valeurs entre 0 et 1) (3.2)**
 
 Interprétation :
 
 lorsque 𝐶 ≈ 1 (fort relief) → le MNT non lissé domine
 
-lorsque 𝐶≈0 (faible relief) → le MNT lissé domine
+lorsque 𝐶 ≈ 0 (faible relief) → le MNT lissé domine
 
 entre les deux → transition progressive contrôlée par la sigmoïde
 
-Raster en sortie : **MNT lissé de manière différencielle**
+Raster en sortie : **$\text{MNT}_{\text{lissé de manière différencielle}}$**
 ---
 
