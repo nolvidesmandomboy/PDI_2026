@@ -66,8 +66,11 @@ Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transform
 
 Outil utilisé : **Calculatrice Raster**
 
-Formule : 𝐶(Raster_ET)=1/(1+𝑒−6𝑥−4)  
-Paramètres **6** et **4** (a et k)
+$$C(\text{Raster\_ET}) = \frac{1}{1 + e^{-a(x - k)}}$$
+
+Avec :
+- $a = 6$ : coefficient de pente de la sigmoïde
+- $k = 4$ : valeur d'écart-type dans les zones de transition
 
 Raster en sortie : **raster normalisé entre 0 et 1**
 
@@ -105,11 +108,11 @@ Applique un lissage différencié sur l'entièreté du MNT choisi en entrée, se
 Méthode : 
 La combinaison finale repose sur la pondération suivante : 
 
+$$\text{MNT\_FINAL} = A \cdot C + (1 - C) \cdot B$$
+
 A : **MNT d’origine**  
 B : **MNT lissé (3.3)**
 C : **raster d’écart-type normalisé (valeurs entre 0 et 1) (3.2)**.
-
-Formule : MNT_FINAL= **𝐴*𝐶 + (1−𝐶)*𝐵**
 
 Interprétation :
 
