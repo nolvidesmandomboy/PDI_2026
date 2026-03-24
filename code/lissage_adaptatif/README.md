@@ -70,13 +70,13 @@ $$C(\text{Raster}_{\text{ET}}) = \frac{1}{1 + e^{-a \cdot (x - k)}}$$
 
 Avec :
 
-- $\text{Raster}_{\text{ET}}$ : le raster en sortie des valeurs d'écart-type
+- $\text{Raster}_{\text{ET}}$ : le raster en sortie des valeurs d'écart-type [voir 3.1](#31-calcul-des-valeurs-décart-type)
 - $a = 6$ : le coefficient de pente de la sigmoïde.
 Le paramètre par défaut **a = 6** détermine la brutalité de la transition ; plus a est grand, plus la transition est abrupte, plus les zones de transition sont petites. **6** a été choisi pour obtenir un lissage très différencié.
 - $k = 4$ : la valeur d'écart-type dans les zones de transition.
 Le paramètre par défaut **k** correspond au seuil autour duquel la sigmoïde bascule de 0 vers 1, c'est-à-dire, où la transition entre le lissage fort et l'absence de lissage commence.
 
-Raster en sortie : **raster normalisé ($\text{Raster}_{\text{normalisé}}$) entre 0 et 1**
+Raster en sortie : **Raster normalisé ($\text{Raster}_{\text{normalisé}}$) entre 0 et 1**
 
 Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape finale de la combinaison.
 
@@ -99,7 +99,6 @@ Paramètres :
 Sortie : **$\text{MNT}_{\text{lissé}}$**
 
 ---
-
 
 ## 3.4 Pondération adaptative des MNT lissé et non lissé et combinaison
 
