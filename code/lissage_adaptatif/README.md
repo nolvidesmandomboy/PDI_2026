@@ -70,7 +70,7 @@ $$C(\text{Raster}_{\text{ET}}) = \frac{1}{1 + e^{-a \cdot (x - k)}}$$
 
 Avec :
 
-- $\text{Raster}_{\text{ET}}$ : le raster en sortie des valeurs d'écart-type [voir 3.1](#31-calcul-des-valeurs-décart-type)
+- $\text{Raster}_{\text{ET}}$ : le raster en sortie des valeurs d'écart-type ([voir 3.1](#31-calcul-des-valeurs-décart-type))
 - $a = 6$ : le coefficient de pente de la sigmoïde.
 Le paramètre par défaut **a = 6** détermine la brutalité de la transition ; plus a est grand, plus la transition est abrupte, plus les zones de transition sont petites. **6** a été choisi pour obtenir un lissage très différencié.
 - $k = 4$ : la valeur d'écart-type dans les zones de transition.
