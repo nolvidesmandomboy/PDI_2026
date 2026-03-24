@@ -76,7 +76,7 @@ Le paramètre par défaut **a = 6** détermine la brutalité de la transition ; 
 - $k = 4$ : la valeur d'écart-type dans les zones de transition.
 Le paramètre par défaut **k** correspond au seuil autour duquel la sigmoïde bascule de 0 vers 1, c'est-à-dire, où la transition entre le lissage fort et l'absence de lissage commence.
 
-Raster en sortie : **raster normalisé entre 0 et 1**
+Raster en sortie : **raster normalisé ($\text{Raster}_{\text{normalisé}}$) entre 0 et 1**
 
 Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape finale de la combinaison.
 
@@ -116,7 +116,7 @@ $$\text{MNT}_{\text{final}} = A \cdot C + (1 - C) \cdot B$$
 Avec :
 - A : **$\text{MNT}_{\text{origine}}$**  
 - B : **$\text{MNT}_{\text{lissé}}$** → [voir 3.3](#33-lissage-général-du-mnt)
-- C : **$\text{Raster}_{\text{ET}}$** (valeurs entre 0 et 1) → [voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde)
+- C : **$\text{Raster}_{\text{normalisé}}$** (valeurs entre 0 et 1) → [voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde)
 
 Interprétation :
 
