@@ -111,12 +111,12 @@ Applique un lissage différencié sur l'entièreté du MNT choisi en entrée, se
 Méthode : 
 La combinaison finale repose sur la pondération suivante : 
 
-$$\text{MNT-FINAL} = A \cdot C + (1 - C) \cdot B$$
+$$\text{MNT}_{\text{final}} = A \cdot C + (1 - C) \cdot B$$
 
 Avec :
 - A : **$\text{MNT}_{\text{origine}}$**  
-- B : **$\text{MNT}_{\text{lissé}}$ (3.3)**
-- C : **raster d’écart-type normalisé (valeurs entre 0 et 1) (3.2)**
+- B : **$\text{MNT}_{\text{lissé}}$** → [voir 3.3](#33-lissage-global)
+- C : **$\text{Raster}_{\text{ET}}$** (valeurs entre 0 et 1) → [voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde)
 
 Interprétation :
 
@@ -127,5 +127,5 @@ lorsque 𝐶 ≈ 0 (faible relief) → le MNT lissé domine
 entre les deux → transition progressive contrôlée par la sigmoïde
 
 Raster en sortie : **$\text{MNT}_{\text{lissé de manière différencielle}}$**
----
+
 
