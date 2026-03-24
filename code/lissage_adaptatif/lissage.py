@@ -1,23 +1,17 @@
-# -*- coding: utf-8 -*-
 import arcpy
 from arcpy.ia import *
 from arcpy.sa import *
 
-
-class Toolbox:
-    def __init__(self):
-        self.label = "Suivi GEODEV"
-        self.alias = "suivi_geodev"
-        self.tools = [Lissage]
-
-
-class Lissage:
+class Lissage(object):
     def __init__(self):
         self.label = "Lissage"
         self.description = "Lissage adaptatif par combinaison de MNT deux MNT"
 
     def getParameterInfo(self):
-        #Input = MNT LiDAR HD
+        
+        params = []
+        
+        # 0 - MNT en entrée
         p0 = arcpy.Parameter(
             displayName="MNT en entrée",
             name="input",
@@ -26,6 +20,7 @@ class Lissage:
             direction="Input"
         )
 
+        # 1 - Raster calculé de l'écart-type en sortie
         p1 = arcpy.Parameter(
             displayName="Raster calculé de l'écart-type en sortie",
             name="out_SD",
@@ -34,6 +29,7 @@ class Lissage:
             direction="Output"
         )
 
+        # 2 -
         p2 = arcpy.Parameter(
             displayName="Rayon pour l'écart-type (en cellules, type de voisinage = cercle)",
             name="radius_SD",
@@ -43,6 +39,7 @@ class Lissage:
         )
         p2.value = 100
 
+        # 3 -
         p3 = arcpy.Parameter(
             displayName="Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie",
             name="out_Sig",
@@ -51,7 +48,7 @@ class Lissage:
             direction="Output"
         )
 
-        
+        # 4 -
         p4 = arcpy.Parameter(
             displayName="Coefficient de pente de la sigmoïde (a)",
             name="coef_slop_Sig",
@@ -61,6 +58,7 @@ class Lissage:
         )
         p4.value = 6
 
+        # 5 -
         p5 = arcpy.Parameter(
             displayName="Valeur d'écart-type dans les zones de transition (k)",
             name="transi_SD",
@@ -70,6 +68,7 @@ class Lissage:
         )
         p5.value = 4
 
+        # 6 -
         p6 = arcpy.Parameter(
             displayName="MNT lissé global en sortie",
             name="out_Mean",
@@ -78,6 +77,7 @@ class Lissage:
             direction="Output"
         )
     
+        # 7 -
         p7 = arcpy.Parameter(
             displayName="Type de statistique de lissage",
             name="typ_Stat",
@@ -86,10 +86,10 @@ class Lissage:
             direction="Input"
         )
         p7.filter.type = "ValueList"
-        p7.filter.list = ["MEAN"]
+        p7.filter.list = ["MEAN", "GAUSSIAN"] ## à modifier pour le GAUSSIAN
         p7.value = "MEAN"
 
-        
+        # 8 - 
         p8 = arcpy.Parameter(
         displayName="Rayon pour le lissage global (en cellules, type de voisinage = cercle)",
         name="radius_Mean",
@@ -99,6 +99,7 @@ class Lissage:
         )
         p8.value = 15
         
+        # 9 -
         p9 = arcpy.Parameter(
             displayName="Emplacement du MNT final en sortie",
             name="output",
@@ -106,13 +107,13 @@ class Lissage:
             parameterType="Required",
             direction="Output"
         )
-
-
-        return [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9]
-
+        
+        params.extend([p0, p1, p2, p3, p4, p5, p6, p7, p8, p9])
+        return params
+    
     def isLicensed(self):
         return True
-
+    
     def execute(self, parameters, messages):
         arcpy.env.overwriteOutput = True
         arcpy.CheckOutExtension("spatial")
@@ -169,12 +170,3 @@ class Lissage:
         out_raster.save(Raster_Calculator_2_)
 
         messages.addMessage("Lissage terminé avec succès.")
-
-
-if __name__ == '__main__':
-    with arcpy.EnvManager(
-        scratchWorkspace=r"C:\Users\Raphaël\OneDrive - univ-lyon2.fr\Bureau\ETUDES\MASTER\COURS\M1\Semestre 1\PDI\MNT\Suivi_GEODEV_2026\Suivi_GEODEV_2026\Default.gdb",
-        workspace=r"C:\Users\Raphaël\OneDrive - univ-lyon2.fr\Bureau\ETUDES\MASTER\COURS\M1\Semestre 1\PDI\MNT\Suivi_GEODEV_2026\Suivi_GEODEV_2026\Default.gdb"
-    ):
-        tbx = Toolbox()
-        tool = Lissage()
