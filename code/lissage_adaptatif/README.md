@@ -23,7 +23,8 @@ Le traitement comprend les étapes suivantes :
 | MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel inclu dans l'air du disque de rayon 100 (valeur par défaut) |
 | Rayon pour l'écart type | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer l'écart-type |
 | Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie | Raster des valeurs d'écarts-types normalisées entre 0 et 1 |
-| Paramètre de décalage de la sigmoïde (k) | Valeur d'écart type autour de laquelle la sigmoïde bascule de 0 vers 1 |
+| Coefficiant de pente de la sigmoïde (a) | Etendue de la zone de transition (valeurs supérieures à 0 et inférieures à 1) |
+| Paramètre de décalage de la sigmoïde (k) | Valeur d'écart type autour de laquelle la sigmoïde bascule de 0 vers 1 (transition de zone plane en zone de montagne) |
 | MNT lissé global en sortie | MNT lissé uniformément pour la combinaison finale|
 | Type de statistique de lissage | Statistique sur la base de laquelle le lissage va être effectué |
 | Rayon pour le lissage global | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer la moyenne (ou autre statistique sélectionnée)  |
