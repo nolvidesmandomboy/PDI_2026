@@ -41,8 +41,7 @@ Le processus de lissage différencié du MNT est composé de plusieurs étapes.
 
 La première étape consiste à **calculer les valeurs d'écart-type**.
 
-Outil utilisé :  
-**Statistiques focales**
+Outil utilisé :  **Statistiques focales**
 
 Objectifs :
 
