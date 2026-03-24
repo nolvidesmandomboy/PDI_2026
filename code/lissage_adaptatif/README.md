@@ -66,7 +66,7 @@ Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transform
 
 Outil utilisé : **Calculatrice Raster**
 
-$$C(\text{Raster\_ET}) = \frac{1}{1 + e^{-a(x - k)}}$$
+$$C(\text{Raster-ET}) = \frac{1}{1 + e^{-a(x - k)}}$$
 
 Avec :
 - $a = 6$ : coefficient de pente de la sigmoïde
@@ -108,7 +108,7 @@ Applique un lissage différencié sur l'entièreté du MNT choisi en entrée, se
 Méthode : 
 La combinaison finale repose sur la pondération suivante : 
 
-$$\text{MNT\_FINAL} = A \cdot C + (1 - C) \cdot B$$
+$$\text{MNT-FINAL} = A \cdot C + (1 - C) \cdot B$$
 
 A : **MNT d’origine**  
 B : **MNT lissé (3.3)**
