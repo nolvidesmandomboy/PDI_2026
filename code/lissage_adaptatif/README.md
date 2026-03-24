@@ -114,8 +114,8 @@ $$\text{MNT}_{\text{final}} = A \cdot C + (1 - C) \cdot B$$
 
 Avec :
 - A : **$\text{MNT}_{\text{origine}}$**  
-- B : **$\text{MNT}_{\text{lissé}}$** → [voir 3.3](#33-lissage-général-du-mnt)
-- C : **$\text{Raster}_{\text{normalisé}}$** (valeurs entre 0 et 1) → [voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde)
+- B : **$\text{MNT}_{\text{lissé}}$** ([voir 3.3](#33-lissage-général-du-mnt))
+- C : **$\text{Raster}_{\text{normalisé}}$** (valeurs entre 0 et 1) ([voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde))
 
 Interprétation :
 
