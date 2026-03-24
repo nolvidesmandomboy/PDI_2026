@@ -107,8 +107,17 @@ class Lissage(object):
             parameterType="Required",
             direction="Output"
         )
+
+        p10 = arcpy.Parameter(
+            displayName= 'Supprimer les fichiers intermédiaires après le traitement',
+            name='delete_inter',
+            datatype='GPBoolean',
+            parameterType='Optional',
+            direction='Input'
+        )
+        p10.value=True
         
-        params.extend([p0, p1, p2, p3, p4, p5, p6, p7, p8, p9])
+        params.extend([p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10])
         return params
     
     def isLicensed(self):
@@ -129,11 +138,15 @@ class Lissage(object):
         typ_Stat      = parameters[7].valueAsText
         radius_Mean   = parameters[8].value
         out_raster    = parameters[9].valueAsText
+        delete_inter  = parameters[10].value
         
-        
+        #4 traitements, éventuellement 1 suppression (fichiers intermédiaires)
+        nb_etapes=5 if delete_inter else 4
+        arcpy.SetProgressor('Step', 'Lissage adaptatif en cours...', 0, nb_etapes, 1)
+
         # Focal Statistics : Écart-type, calcul de l'écart type entre chaque pixel et la valeur moyenne des pixels autour compris dans un disque
         # de rayon 100 (fixé par défaut, variable)
-
+        arcpy.SetProgressorLabel("Calcul de l'écart-type local...")
         messages.addMessage("Calcul de l'écart-type local...")
         Focal_Statistics = out_SD
         out_SD = arcpy.ia.FocalStatistics(
@@ -142,16 +155,19 @@ class Lissage(object):
             "STD", "DATA", 90
         )
         out_SD.save(Focal_Statistics)
+        arcpy.SetProgressorPosition()
 
         # Raster Calculator : #Normalisation des valeurs d'écart type ; raster des valeurs d'écart type entré dans la fonction sigmoide 
        
-        messages.addMessage("Calcul de la sigmoïde...")
+        arcpy.SetProgressorLabel("Etape 2/4 Normalisation des valeurs d'écart-type...")
+        messages.addMessage("Normalisation des valeurs d'écart-type...")
         Raster_Calculator = out_Sig
         out_Sig = 1 / (1 + Exp(-coef_slop_Sig * (out_SD - transi_SD)))
         out_Sig.save(Raster_Calculator)
+        arcpy.SetProgressorPosition()
 
         # Focal Statistics : Calcul du MNT lissé globalement par moyennage des valeurs des pixels (rayon 15 cellules, soit 7.5m)
-
+        arcpy.SetProgressorLabel("Etape 3/4 Calcul du lissage global...")
         messages.addMessage("Calcul du lissage global...")
         Focal_Statistics_2_ = out_Mean
         out_Mean = arcpy.ia.FocalStatistics(
@@ -160,13 +176,29 @@ class Lissage(object):
             typ_Stat, "DATA", 90
         )
         out_Mean.save(Focal_Statistics_2_)
+        arcpy.SetProgressorPosition()
 
         # Raster Calculator : Combinaison différenciée des deux MNT (lissé et non lissé)
         #via la pondération par les valeurs normalisées d'écart-type
-        messages.addMessage("Fusion finale...")
+        arcpy.SetProgressorLabel("Combinaison des rasters...")
+        messages.addMessage("Combinaison des rasters...")
         Raster_Calculator_2_ = out_raster
         mnt = arcpy.Raster(in_raster)
         out_raster = mnt * out_Sig + (1 - out_Sig) * out_Mean
         out_raster.save(Raster_Calculator_2_)
+        arcpy.SetProgressorPosition()
 
         messages.addMessage("Lissage terminé avec succès.")
+
+
+        if delete_inter:
+            arcpy.SetProgressorLabel('Supression des fichiers intermédiaires...')
+            messages.addMessage('Supression des fichiers intermédiaires...')
+            for path in [Focal_Statistics, Raster_Calculator, Focal_Statistics_2_]:
+                if arcpy.Exists (path):
+                    arcpy.Delete_management(path)
+                    messages.addMessage(f'- Supprimé : {path}')
+            arcpy.SetProgressorPosition()
+            messages.addMessage('Fichiers intermédiaires supprimés.')
+        
+        # arcpy.ResetProgressor()
