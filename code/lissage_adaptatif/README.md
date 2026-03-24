@@ -78,7 +78,7 @@ Le paramètre par défaut **k** correspond au seuil autour duquel la sigmoïde b
 
 Raster en sortie : **raster normalisé entre 0 et 1**
 
-Il sera ensuite utilisé comme **coefficiant de pondération** dans l'étape finale de la combinaison.
+Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape finale de la combinaison.
 
 ---
 
@@ -115,17 +115,13 @@ $$\text{MNT}_{\text{final}} = A \cdot C + (1 - C) \cdot B$$
 
 Avec :
 - A : **$\text{MNT}_{\text{origine}}$**  
-- B : **$\text{MNT}_{\text{lissé}}$** → [voir 3.3](#33-lissage-global)
+- B : **$\text{MNT}_{\text{lissé}}$** → [voir 3.3](#33-lissage-général-du-mnt)
 - C : **$\text{Raster}_{\text{ET}}$** (valeurs entre 0 et 1) → [voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde)
 
 Interprétation :
 
-lorsque 𝐶 ≈ 1 (fort relief) → le MNT non lissé domine
-
-lorsque 𝐶 ≈ 0 (faible relief) → le MNT lissé domine
-
-entre les deux → transition progressive contrôlée par la sigmoïde
+- Lorsque $C \approx 1$ (fort relief) → le MNT non lissé domine
+- Lorsque $C \approx 0$ (faible relief) → le MNT lissé domine
+- Entre les deux → transition progressive contrôlée par la sigmoïde
 
 Raster en sortie : **$\text{MNT}_{\text{lissé de manière différencielle}}$**
-
-
