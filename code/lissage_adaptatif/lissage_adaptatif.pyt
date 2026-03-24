@@ -4,6 +4,7 @@ from arcpy.ia import *
 from arcpy.sa import *
 from lissage import Lissage
 
+
 class Toolbox(object):
     def __init__(self):
         self.label = "Suivi GEODEV"

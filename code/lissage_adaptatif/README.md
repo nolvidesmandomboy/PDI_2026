@@ -1,9 +1,9 @@
-#Description du fonctionnement de la toolbox
-##Outil : Lissage adaptatif de MNT LiDAR HD
+# 1. Description du fonctionnement de la toolbox
+Outil : Lissage adaptatif de MNT LiDAR HD
 
-Cette toolbox Arcgis contient un seul outil de traitement : l'outil **Lissage adaptatif de MNT (Modèle Numérique de Terrain) LiDAR HD**
+Cette toolbox Arcgis contient deux outils de traitement : l'outil **Lissage adaptatif de MNT (Modèle Numérique de Terrain) LiDAR HD** et l'outil de **génération des courbes de niveau de l'IGN**
 
-Cet outil permet de lisser automatiquement et de manière différencielle **un MNT LiDAR HD** à partir d’un **MNT LiDAR HD**.
+Cet outil permet de lisser automatiquement et de manière différencielle **un MNT LiDAR HD** à partir d’un **MNT LiDAR HD**, puis d'afficher les **courbes de niveaux correctes** géométriquement.
 
 Le traitement comprend les étapes suivantes :
 
@@ -11,6 +11,7 @@ Le traitement comprend les étapes suivantes :
 - Normalisation de ces valeurs via une fonction sigmoide  
 - lissage général du MNT comme couche intermédiaire
 - Calcul final du MNT lissé différenciellement 
+- Calcul des courbes de niveau (outil séparé intégré dans ce code pour la démonstration)
 
 ---
 
@@ -20,9 +21,13 @@ Le traitement comprend les étapes suivantes :
 |---|---|
 | MNT en entrée | Raster représentant le modèle numérique de terrain à lisser |
 | MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel inclu dans l'air du disque de rayon 100 (valeur par défaut) |
-| Rayon pour l'écart type | Valeur définie pour le calcul de l'écart type |
-;;;;;;;;;;;;;;; A FINIR ................
-
+| Rayon pour l'écart type | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer l'écart-type |
+| Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie | Raster des valeurs d'écarts-types normalisées entre 0 et 1 |
+| Paramètre de décalage de la sigmoïde (k) | Valeur d'écart type autour de laquelle la sigmoïde bascule de 0 vers 1 |
+| MNT lissé global en sortie | MNT lissé uniformément pour la combinaison finale|
+| Type de statistique de lissage | Statistique sur la base de laquelle le lissage va être effectué |
+| Rayon pour le lissage global | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer la moyenne (ou autre statistique sélectionnée)  |
+| Emplacement du MNT final en sortie | Emplacement du MNT final en sortie  |
 ---
 
 
@@ -114,6 +119,6 @@ lorsque 𝐶≈0 (faible relief) → le MNT lissé domine
 
 entre les deux → transition progressive contrôlée par la sigmoïde
 
-Raster en sortie : **raster normalisé entre 0 et 1**
+Raster en sortie : **MNT lissé de manière différencielle**
 ---
 
