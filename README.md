@@ -98,6 +98,10 @@ Outil utilisé : **Calculatrice Raster**
 
 $$C(\text{Raster}_{\text{ET}}) = \frac{1}{1 + e^{-a \cdot (x - k)}}$$
 
+<img width="500" height="660" alt="image" src="https://github.com/user-attachments/assets/2d59c310-6803-4a08-ac0e-d79e380fb2e9" />
+
+
+
 Avec :
 
 - $\text{Raster}_{\text{ET}}$ : le raster en sortie des valeurs d'écart-type ([voir 3.1](#31-calcul-des-valeurs-décart-type))
