@@ -1,3 +1,6 @@
+# Outil de lissage adaptatif de MNT LiDAR HD pour la génération de courbes de niveau  
+
+
 # 1. Description du fonctionnement de la toolbox
 Outil : Lissage adaptatif de MNT LiDAR HD 
 
@@ -165,12 +168,12 @@ APRES
 
 
 ## 3.6 Calcul des courbes de niveau 
-**Paramètres**
-simplify_tolerance = 0.5,
-smooth_tolerance = 15,
-simplify_tolerance_bis = 0.5
-equidistance = 5
-longueur_min = 60
+**Paramètres :**  
+simplify_tolerance = 0.5,  
+smooth_tolerance = 15,  
+simplify_tolerance_bis = 0.5  
+equidistance = 5  
+longueur_min = 60  
 
 
 <img width="976" height="552" alt="Capture d&#39;écran 2026-03-25 213114" src="https://github.com/user-attachments/assets/c5da6ca7-a1ce-4873-bcc8-dd9bc2085a49" />
