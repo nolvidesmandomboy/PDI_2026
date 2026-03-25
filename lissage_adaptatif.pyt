@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# Boite à outil Python pour le lissage adaptatif et la génération des courbes de niveau
+# Auteurs : CORREC Adélie, GONZO-MASSOL Raphaël, MANDOMBOY Nolvides
+
 import arcpy
 from arcpy.ia import *
 from arcpy.sa import *

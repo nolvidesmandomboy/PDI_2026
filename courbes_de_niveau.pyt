@@ -107,11 +107,10 @@ class GenererCourbes(object):
         )
         p6.value = "Courbes_Finales"
 
-        params.extend([p0, p1, p2, p3, p2bis, p4, p5, p6])
+        params.extend([p0, p1, p2, p2bis, p3, p4, p5, p6]) #interchangement entre p2bis et p3
         return params
 
     def execute(self, parameters, messages):
-        # Récupération des paramètres
         MNTentree = parameters[0].valueAsText
         # cell_size = int(parameters[1].value)
         simplify_tolerance = float(parameters[1].value)
@@ -148,7 +147,7 @@ class GenererCourbes(object):
 
         # --- Étape 2 : Courbes de niveau ---
         arcpy.AddMessage(f"Calcul des courbes (équidistance {equidistance} m)")
-        arcpy.ddd.ContourWithBarriers( courbes, None, "POLYLINES",
+        arcpy.ddd.ContourWithBarriers( MNTentree, courbes, None, "POLYLINES",
                                       None, "NO_EXPLICIT_VALUES_ONLY", 0, equidistance, equidistance*5, [], 1)
 
         arcpy.management.AlterField(courbes, "Contour", "Altitude", "Altitude")
