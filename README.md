@@ -82,6 +82,9 @@ Paramètres :
 
 Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}$)**
 
+<img width="500" height="860" alt="image" src="https://github.com/user-attachments/assets/81d6266a-ffd4-4178-be01-fa034f17b838" />
+
+
 ---
 
 ## 3.3 Normalisation des valeurs d'écart type par une fonction sigmoïde
@@ -101,6 +104,9 @@ Le paramètre par défaut **a = 6** détermine la brutalité de la transition ; 
 Le paramètre par défaut **k** correspond au seuil autour duquel la sigmoïde bascule de 0 vers 1, c'est-à-dire, où la transition entre le lissage fort et l'absence de lissage commence.
 
 Raster en sortie : **Raster normalisé ($\text{Raster}_{\text{normalisé}}$) entre 0 et 1**
+
+<img width="500" height="856" alt="image" src="https://github.com/user-attachments/assets/d5a55f77-3e6e-4751-9586-d808a01cdb67" />
+
 
 Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape finale de la combinaison.
 
@@ -148,3 +154,26 @@ Interprétation :
 - Entre les deux → transition progressive contrôlée par la sigmoïde
 
 Raster en sortie : **$\text{MNT}_{\text{lissé de manière différencielle}}$**
+
+AVANT
+
+<img width="500" height="892" alt="image" src="https://github.com/user-attachments/assets/5f3705da-0647-4140-b09b-2f13ea5d63f7" />
+
+APRES 
+
+<img width="500" height="892" alt="image" src="https://github.com/user-attachments/assets/46f3fbef-8e07-4389-87df-8983ee87c3d0" />
+
+
+## 3.6 Calcul des courbes de niveau 
+**Paramètres**
+simplify_tolerance = 0.5,
+smooth_tolerance = 15,
+simplify_tolerance_bis = 0.5
+equidistance = 5
+longueur_min = 60
+
+
+<img width="976" height="552" alt="Capture d&#39;écran 2026-03-25 213114" src="https://github.com/user-attachments/assets/c5da6ca7-a1ce-4873-bcc8-dd9bc2085a49" />
+
+<img width="960" height="692" alt="Capture d&#39;écran 2026-03-25 213249" src="https://github.com/user-attachments/assets/cc07753e-7551-44f3-837c-9c21272dd388" />
+
