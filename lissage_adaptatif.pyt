@@ -2,8 +2,7 @@
 import arcpy
 from arcpy.ia import *
 from arcpy.sa import *
-from code.lissage import Lissage
-
+from lissage import Lissage
 
 class Toolbox(object):
     def __init__(self):
