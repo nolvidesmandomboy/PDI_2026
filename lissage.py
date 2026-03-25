@@ -205,9 +205,10 @@ class Lissage(object):
         arcpy.CheckOutExtension("ImageAnalyst")
 
         
-        # script_dir = os.path.dirname(os.path.abspath(__file__))
-        # toolbox_path = os.path.join(script_dir, "courbes_de_niveau.pyt")
-        toolbox_path = r"C:\PDI_2026\courbes_de_niveau.pyt"
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        toolbox_path = os.path.join(script_dir, "courbes_de_niveau.pyt")
+        
+        #toolbox_path = r"..\PDI_2026\courbes_de_niveau.pyt"
         arcpy.ImportToolbox(toolbox_path, "courbes")
         arcpy.AddMessage(str(arcpy.ListTools()))
 
