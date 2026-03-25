@@ -1,3 +1,5 @@
+#Auteurs : Adélie Correc, Raphaël Gonzo Massol et Nolvides Mandomboy
+
 # -*- coding: utf-8 -*-
 import arcpy
 from arcpy.ia import *
