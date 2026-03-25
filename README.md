@@ -47,8 +47,8 @@ Outil utilisé :  **Rééchantillonnage**
 
 Objectifs :
 
-- Changer la taille des pixels du raster.
-- Attribuer une nouvelle valeur à tous les nouveaux pixels en fonction des pixels voisins avec la méthode "NEAREST"
+- Changer la taille des pixels du raster de 0,5m à 2,5m.
+- Attribuer une nouvelle valeur à tous les nouveaux pixels en fonction des pixels voisins avec la méthode "NEAREST".
 
 Paramètres :
 - X & Y : **2,5** (modifiable)
