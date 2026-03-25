@@ -1,5 +1,5 @@
 # 1. Description du fonctionnement de la toolbox
-Outil : Lissage adaptatif de MNT LiDAR HD
+Outil : Lissage adaptatif de MNT LiDAR HD 
 
 Cette toolbox Arcgis contient deux outils de traitement : l'outil **Lissage adaptatif de MNT (Modèle Numérique de Terrain) LiDAR HD** et l'outil de **génération des courbes de niveau de l'IGN**
 
