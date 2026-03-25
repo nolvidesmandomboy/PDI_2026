@@ -58,13 +58,13 @@ Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}
 
 ## 3.2 Calcul des valeurs d'écart-type
 
-La première étape consiste à **calculer les valeurs d'écart-type**.
+La deuxième étape consiste à **calculer les valeurs d'écart-type**.
 
 Outil utilisé :  **Statistiques focales**
 
 Objectifs :
 
-- Calculer pour chaque cellule du MNT la différence avec les valeurs moyennes des cellules dans un voisinage défini (cellules comprises dans un disque de rayon R prédéfini : 100 cellules soit 50 m)
+- Calculer pour chaque cellule du MNT rééchantilloné la différence avec les valeurs moyennes des cellules dans un voisinage défini (cellules comprises dans un disque de rayon R prédéfini : 100 cellules soit 25 m)
 
 - Dégage les grands ensembles : les zones à haute valeur d'ET correspondent aux montagnes, celles à faibles valeurs aux zones planes 
 
@@ -110,7 +110,7 @@ Outil utilisé : **Statistiques focales**
 
 Paramètres :
 - Type de voisinage : **CERCLE**
-- Rayon : **15** (valeur modifiable)
+- Rayon : **20** (valeur modifiable)
 - Type d'unité : **cellule**
 - Type de statistiques : **Moyenne**
 
