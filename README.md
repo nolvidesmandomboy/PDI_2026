@@ -54,7 +54,7 @@ Paramètres :
 - X & Y : **2,5** (modifiable)
 - Méthode de rééchantillonage : **Nearest**
 
-Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}$)**
+Raster en sortie : **Raster rééchantillonné**
 
 ## 3.2 Calcul des valeurs d'écart-type
 
@@ -66,7 +66,7 @@ Objectifs :
 
 - Calculer pour chaque cellule du MNT rééchantilloné la différence avec les valeurs moyennes des cellules dans un voisinage défini (cellules comprises dans un disque de rayon R prédéfini : 100 cellules soit 25 m)
 
-- Dégage les grands ensembles : les zones à haute valeur d'ET correspondent aux montagnes, celles à faibles valeurs aux zones planes 
+- Dégage les grands ensembles : les zones à haute valeur d'écart-type correspondent aux montagnes, celles à faibles valeurs aux zones planes 
 
 Paramètres :
 - Type de voisinage : **CERCLE**
