@@ -7,9 +7,9 @@ Cet outil permet de lisser automatiquement et de manière différencielle **un M
 
 Le traitement comprend les étapes suivantes :
 
-- production d'un raster intermédiaire avec les valeurs d'écarts-types
-- Normalisation de ces valeurs via une fonction sigmoide  
-- lissage général du MNT comme couche intermédiaire
+- Production d'un raster intermédiaire avec les valeurs d'écarts-types
+- Production d'un raster de ces valeurs normalisées via une fonction sigmoide  
+- Lissage général du MNT d'origine comme couche intermédiaire
 - Calcul final du MNT lissé différenciellement 
 - Calcul des courbes de niveau (outil séparé intégré dans ce code pour la démonstration)
 
