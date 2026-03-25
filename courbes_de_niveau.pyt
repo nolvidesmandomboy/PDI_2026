@@ -30,94 +30,104 @@ class GenererCourbes(object):
             parameterType="Required",
             direction="Input")
 
-        # 1 - Taille de cellule (résolution resample)
-        p1 = arcpy.Parameter(
-            displayName="Taille de rééchantillonage (mètres)",
-            name="cell_size",
-            datatype="GPLong",
-            parameterType="Required",
-            direction="Input")
+        # # 1 - Taille de cellule (résolution resample)
+        # p1 = arcpy.Parameter(
+        #     displayName="Taille de rééchantillonage (mètres)",
+        #     name="cell_size",
+        #     datatype="GPLong",
+        #     parameterType="Required",
+        #     direction="Input")
 
         # 2 - Tolérance SimplifyLine
-        p2 = arcpy.Parameter(
+        p1 = arcpy.Parameter(
             displayName="Tolérance SimplifyLine (mètres)",
             name="simplify_tolerance",
             datatype="GPDouble",
             parameterType="Required",
-            direction="Input")
+            direction="Input"
+        )
+        p1.value = 0.5
 
         # 3 - Tolérance SmoothLine
-        p3 = arcpy.Parameter(
+        p2 = arcpy.Parameter(
             displayName="Tolérance SmoothLine (mètres)",
             name="smooth_tolerance",
             datatype="GPDouble",
             parameterType="Required",
-            direction="Input")
-        
+            direction="Input"
+        )
+        p2.value = 15
+
         # 4 - Tolérance SimplifyLine après
         p2bis = arcpy.Parameter(
             displayName="Tolérance SimplifyLine après lissage (mètres)",
             name="simplify_tolerance_bis",
             datatype="GPDouble",
             parameterType="Required",
-            direction="Input")
+            direction="Input"
+        )
+        p2bis.value = 0.5
 
         # 5 - Géodatabase de sortie
-        p4 = arcpy.Parameter(
+        p3 = arcpy.Parameter(
             displayName="Géodatabase de sortie",
             name="gdb_sortie",
             datatype="DEWorkspace",
             parameterType="Required",
-            direction="Input")
+            direction="Input"
+        )
 
         # 6 - Équidistance des courbes
-        p5 = arcpy.Parameter(
+        p4 = arcpy.Parameter(
             displayName="Équidistance des courbes (mètres)",
             name="equidistance",
             datatype="GPLong",
             parameterType="Required",
-            direction="Input")
-        p5.value = 10  # valeur par défaut
+            direction="Input"
+        )
+        p4.value = 5  # valeur par défaut
 
         # 7 - Longueur minimale des courbes (filtrage final)
-        p6 = arcpy.Parameter(
+        p5 = arcpy.Parameter(
             displayName="Longueur minimale des courbes (mètres)",
             name="longueur_min",
             datatype="GPDouble",
             parameterType="Optional",
-            direction="Input")
-        p6.value = 0  # pas de filtrage par défaut
+            direction="Input"
+        )
+        p5.value = 60  # pas de filtrage par défaut
 
         # 8 - Nom de la couche finale
-        p7 = arcpy.Parameter(
+        p6 = arcpy.Parameter(
             displayName="Nom de la couche finale",
             name="nom_sortie",
             datatype="GPString",
             parameterType="Required",
-            direction="Input")
-        p7.value = "Courbes_Finales"
+            direction="Input"
+        )
+        p6.value = "Courbes_Finales"
 
-        params.extend([p0, p1, p2, p3, p2bis, p4, p5, p6, p7])
+        params.extend([p0, p1, p2, p3, p2bis, p4, p5, p6])
         return params
 
     def execute(self, parameters, messages):
         # Récupération des paramètres
         MNTentree = parameters[0].valueAsText
-        cell_size = int(parameters[1].value)
-        simplify_tolerance = float(parameters[2].value)
-        smooth_tolerance = float(parameters[3].value)
-        simplify_tolerance_bis = float(parameters[4].value)
-        Mygdb = parameters[5].valueAsText
-        equidistance = int(parameters[6].value)
-        longueur_min = float(parameters[7].value) if parameters[7].value else 0
-        nom_sortie = parameters[8].valueAsText
+        # cell_size = int(parameters[1].value)
+        simplify_tolerance = float(parameters[1].value)
+        smooth_tolerance = float(parameters[2].value)
+        simplify_tolerance_bis = float(parameters[3].value)
+        Mygdb = parameters[4].valueAsText
+        equidistance = int(parameters[5].value)
+        longueur_min = float(parameters[6].value) if parameters[6].value else 0
+        nom_sortie = parameters[7].valueAsText
 
         # Activer overwrite
         arcpy.env.overwriteOutput = True
         arcpy.env.workspace = Mygdb
 
         # Variables internes
-        ResampleName = "TMP_Resample"
+        # ResampleName = "TMP_Resample"
         courbes = "TMP_Courbes"
         courbesFilt = "TMP_CourbesFilt"
         courbesSmooth = "TMP_CourbesSmooth"
@@ -131,14 +141,14 @@ class GenererCourbes(object):
         angle = "ANGLE"
 
         # --- Étape 1 : Resample ---
-        arcpy.AddMessage(f"Création du MNT resample ({cell_size} m)")
-        arcpy.management.Resample(MNTentree, ResampleName,
-                                  cell_size=f"{cell_size} {cell_size}",
-                                  resampling_type="NEAREST")
+        # arcpy.AddMessage(f"Création du MNT resample ({cell_size} m)")
+        # arcpy.management.Resample(MNTentree, ResampleName,
+        #                           cell_size=f"{cell_size} {cell_size}",
+        #                           resampling_type="NEAREST")
 
         # --- Étape 2 : Courbes de niveau ---
         arcpy.AddMessage(f"Calcul des courbes (équidistance {equidistance} m)")
-        arcpy.ddd.ContourWithBarriers(ResampleName, courbes, None, "POLYLINES",
+        arcpy.ddd.ContourWithBarriers( courbes, None, "POLYLINES",
                                       None, "NO_EXPLICIT_VALUES_ONLY", 0, equidistance, equidistance*5, [], 1)
 
         arcpy.management.AlterField(courbes, "Contour", "Altitude", "Altitude")
@@ -195,16 +205,16 @@ def getClass(typ):
         arcpy.management.MakeFeatureLayer(courbesFinal, "courbes_a_inverser", "SENS = -1")
         arcpy.edit.FlipLine("courbes_a_inverser")
 
-        # # --- Étape 5 : Filtrage longueur ---
-        # if longueur_min > 0:
-        #     arcpy.AddMessage(f"Filtrage des courbes de moins de {longueur_min} m")
-        #     arcpy.management.MakeFeatureLayer(courbesFinal, "courbes_layer")
-        #     requete = f"Shape_Length >= {longueur_min}"
-        #     arcpy.management.SelectLayerByAttribute("courbes_layer", "NEW_SELECTION", requete)
-        #     courbesFiltrees = "TMP_CourbesFiltrees"
-        #     arcpy.management.CopyFeatures("courbes_layer", courbesFiltrees)
-        #     courbesFinal = courbesFiltrees
-        #     arcpy.AddMessage("Filtrage terminé.")
+        # --- Étape 5 : Filtrage longueur ---
+        if longueur_min > 0:
+            arcpy.AddMessage(f"Filtrage des courbes de moins de {longueur_min} m")
+            arcpy.management.MakeFeatureLayer(courbesFinal, "courbes_layer")
+            requete = f"Shape_Length >= {longueur_min}"
+            arcpy.management.SelectLayerByAttribute("courbes_layer", "NEW_SELECTION", requete)
+            courbesFiltrees = "TMP_CourbesFiltrees"
+            arcpy.management.CopyFeatures("courbes_layer", courbesFiltrees)
+            courbesFinal = courbesFiltrees
+            arcpy.AddMessage("Filtrage terminé.")
 
         # --- Étape 6 : Ajout du champ ANGLE pour la symbologie ---
         # Ajout champ symbo
@@ -227,7 +237,7 @@ def getClass(typ):
         arcpy.management.CopyFeatures(courbesFinal, sortie_finale)
 
         # --- Nettoyage complet ---
-        for tmp in [ResampleName, courbes, courbesFilt, courbesSmooth,
+        for tmp in [ courbes, courbesFilt, courbesSmooth,
                     bufCourb_G, bufCourb_D, am_G, am_D, courbesFinal]:
             if arcpy.Exists(tmp):
                 arcpy.management.Delete(tmp)
