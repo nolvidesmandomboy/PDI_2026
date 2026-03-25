@@ -20,7 +20,7 @@ Le traitement comprend les étapes suivantes :
 | Paramètre | Description |
 |---|---|
 | MNT en entrée | Raster représentant le modèle numérique de terrain à lisser |
-| MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel inclu dans l'air du disque de rayon 100 (valeur par défaut) |
+| MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel : différence avec la valeur moyenne des cellules dans un voisinage défini |
 | Rayon pour l'écart type | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer l'écart-type |
 | Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie | Raster des valeurs d'écarts-types normalisées entre 0 et 1 |
 | Coefficiant de pente de la sigmoïde (a) | Etendue de la zone de transition (valeurs supérieures à 0 et inférieures à 1) |
