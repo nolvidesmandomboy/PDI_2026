@@ -1,3 +1,5 @@
+#Auteurs : Adélie Correc, Raphaël Gonzo Massol et Nolvides Mandomboy
+
 # -*- coding: utf-8 -*-
 # Boite à outil Python pour le lissage adaptatif et la génération des courbes de niveau
 # Auteurs : CORREC Adélie, GONZO-MASSOL Raphaël, MANDOMBOY Nolvides

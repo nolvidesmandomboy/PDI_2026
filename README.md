@@ -1,5 +1,5 @@
 # 1. Description du fonctionnement de la toolbox
-Outil : Lissage adaptatif de MNT LiDAR HD
+Outil : Lissage adaptatif de MNT LiDAR HD 
 
 Cette toolbox Arcgis contient deux outils de traitement : l'outil **Lissage adaptatif de MNT (Modèle Numérique de Terrain) LiDAR HD** et l'outil de **génération des courbes de niveau de l'IGN**
 
@@ -7,10 +7,11 @@ Cet outil permet de lisser automatiquement et de manière différencielle **un M
 
 Le traitement comprend les étapes suivantes :
 
+- Ré-échantillonage du MNT en entrée
 - Production d'un raster intermédiaire avec les valeurs d'écarts-types
-- Production d'un raster de ces valeurs normalisées via une fonction sigmoide  
+- Production d'un raster intermédiaire de ces valeurs normalisées via une fonction sigmoide  
 - Lissage général du MNT d'origine comme couche intermédiaire
-- Calcul final du MNT lissé différenciellement 
+- Calcul final du MNT lissé différenciellement par combinaison pondérée du raster lissé et non lissé
 - Calcul des courbes de niveau (outil séparé intégré dans ce code pour la démonstration)
 
 ---
@@ -20,6 +21,8 @@ Le traitement comprend les étapes suivantes :
 | Paramètre | Description |
 |---|---|
 | MNT en entrée | Raster représentant le modèle numérique de terrain à lisser |
+| MNT rééchantilloné | MNT rééchantilloné à une taille donnée selon la méthode "plus proches voisins" |
+| Taille de rééchantillonage (en mètres) | Taille des nouvelles cellules (carrées, en mètre) |
 | MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel : différence avec la valeur moyenne des cellules dans un voisinage défini |
 | Rayon pour l'écart type | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer l'écart-type |
 | Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie | Raster des valeurs d'écarts-types normalisées entre 0 et 1 |
@@ -38,17 +41,38 @@ Le processus de lissage différencié du MNT est composé de plusieurs étapes.
 
 ---
 
-## 3.1 Calcul des valeurs d'écart-type
+## 3.1 Rééchantillonage 
 
-La première étape consiste à **calculer les valeurs d'écart-type**.
+La première étape consiste à **Rééchantillonnage du Raster en entrée**.
 
-Outil utilisé :  **Statistiques focales**
+Outil utilisé :  **Rééchantillonnage**
+
+<img width="694" height="416" alt="image" src="https://github.com/user-attachments/assets/ba4823e6-90c3-4ed9-91fb-6208d504fff7" />
+
 
 Objectifs :
 
-- Calculer pour chaque cellule du MNT la différence avec les valeurs moyennes des cellules dans un voisinage défini (cellules comprises dans un disque de rayon R prédéfini : 100 cellules soit 50 m)
+- Changer la taille des pixels du raster de 0,5m à 2,5m.
+- Attribuer une nouvelle valeur à tous les nouveaux pixels en fonction des pixels voisins avec la méthode "NEAREST".
 
-- Dégage les grands ensembles : les zones à haute valeur d'ET correspondent aux montagnes, celles à faibles valeurs aux zones planes 
+Paramètres :
+- Taille de rééchantillonage : côtés X & Y de la cellule, une seule valeur est choisie car c'est un carré
+- Méthode de rééchantillonage : **Plus proches voisins (nearest)**
+
+Raster en sortie : **Raster rééchantillonné**
+
+## 3.2 Calcul des valeurs d'écart-type
+
+La deuxième étape consiste à **calculer les valeurs d'écart-type**.
+
+Outil utilisé :  **Statistiques focales**
+<img width="1276" height="432" alt="image" src="https://github.com/user-attachments/assets/af722304-cbf5-4ab8-aca1-8f93ff206949" />
+
+Objectifs :
+
+- Calculer pour chaque cellule du MNT rééchantilloné la différence avec les valeurs moyennes des cellules dans un voisinage défini (cellules comprises dans un disque de rayon R prédéfini : 100 cellules soit 25 m)
+
+- Dégage les grands ensembles : les zones à haute valeur d'écart-type correspondent aux montagnes, celles à faibles valeurs aux zones planes 
 
 Paramètres :
 - Type de voisinage : **CERCLE**
@@ -60,7 +84,7 @@ Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}
 
 ---
 
-## 3.2 Normalisation des valeurs d'écart type par une fonction sigmoïde
+## 3.3 Normalisation des valeurs d'écart type par une fonction sigmoïde
 
 Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transforme les valeurs d'écart type en un gradient continu entre 0 et 1.
 
@@ -82,7 +106,7 @@ Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape fin
 
 ---
 
-## 3.3 Lissage général du MNT
+## 3.4 Lissage général du MNT
 
 Lissage du MNT, qui sera utilisé pour la combinaison finale
 
@@ -92,7 +116,7 @@ Outil utilisé : **Statistiques focales**
 
 Paramètres :
 - Type de voisinage : **CERCLE**
-- Rayon : **15** (valeur modifiable)
+- Rayon : **20** (valeur modifiable)
 - Type d'unité : **cellule**
 - Type de statistiques : **Moyenne**
 
@@ -100,7 +124,7 @@ Sortie : **$\text{MNT}_{\text{lissé}}$**
 
 ---
 
-## 3.4 Pondération adaptative des MNT lissé et non lissé et combinaison
+## 3.5 Pondération adaptative des MNT lissé et non lissé et combinaison
 
 Outil utilisé : **Calculatrice Raster**
 
