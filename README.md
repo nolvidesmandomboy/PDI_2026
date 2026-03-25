@@ -1,1 +1,126 @@
-# Algorithme de débruitage adaptatif de MNT pour la génération de courbes de niveau
+# 1. Description du fonctionnement de la toolbox
+Outil : Lissage adaptatif de MNT LiDAR HD
+
+Cette toolbox Arcgis contient deux outils de traitement : l'outil **Lissage adaptatif de MNT (Modèle Numérique de Terrain) LiDAR HD** et l'outil de **génération des courbes de niveau de l'IGN**
+
+Cet outil permet de lisser automatiquement et de manière différencielle **un MNT LiDAR HD** à partir d’un **MNT LiDAR HD**, puis d'afficher les **courbes de niveaux correctes** géométriquement.
+
+Le traitement comprend les étapes suivantes :
+
+- production d'un raster intermédiaire avec les valeurs d'écarts-types
+- Normalisation de ces valeurs via une fonction sigmoide  
+- lissage général du MNT comme couche intermédiaire
+- Calcul final du MNT lissé différenciellement 
+- Calcul des courbes de niveau (outil séparé intégré dans ce code pour la démonstration)
+
+---
+
+# 2. Paramètres de l’outil
+
+| Paramètre | Description |
+|---|---|
+| MNT en entrée | Raster représentant le modèle numérique de terrain à lisser |
+| MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel inclu dans l'air du disque de rayon 100 (valeur par défaut) |
+| Rayon pour l'écart type | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer l'écart-type |
+| Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie | Raster des valeurs d'écarts-types normalisées entre 0 et 1 |
+| Coefficiant de pente de la sigmoïde (a) | Etendue de la zone de transition (valeurs supérieures à 0 et inférieures à 1) |
+| Paramètre de décalage de la sigmoïde (k) | Valeur d'écart type autour de laquelle la sigmoïde bascule de 0 vers 1 (transition de zone plane en zone de montagne) |
+| MNT lissé global en sortie | MNT lissé uniformément pour la combinaison finale|
+| Type de statistique de lissage | Statistique sur la base de laquelle le lissage va être effectué |
+| Rayon pour le lissage global | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer la moyenne (ou autre statistique sélectionnée)  |
+| Emplacement du MNT final en sortie | Emplacement du MNT final en sortie  |
+---
+
+
+# 3. Description détaillée du traitement
+
+Le processus de lissage différencié du MNT est composé de plusieurs étapes.
+
+---
+
+## 3.1 Calcul des valeurs d'écart-type
+
+La première étape consiste à **calculer les valeurs d'écart-type**.
+
+Outil utilisé :  **Statistiques focales**
+
+Objectifs :
+
+- Calculer pour chaque cellule du MNT la différence avec les valeurs moyennes des cellules dans un voisinage défini (cellules comprises dans un disque de rayon R prédéfini : 100 cellules soit 50 m)
+
+- Dégage les grands ensembles : les zones à haute valeur d'ET correspondent aux montagnes, celles à faibles valeurs aux zones planes 
+
+Paramètres :
+- Type de voisinage : **CERCLE**
+- Rayon : **100** (valeur modifiable)
+- Type d'unité : **cellule**
+- Type de statistiques : **Ecart-type**
+
+Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}$)**
+
+---
+
+## 3.2 Normalisation des valeurs d'écart type par une fonction sigmoïde
+
+Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transforme les valeurs d'écart type en un gradient continu entre 0 et 1.
+
+Outil utilisé : **Calculatrice Raster**
+
+$$C(\text{Raster}_{\text{ET}}) = \frac{1}{1 + e^{-a \cdot (x - k)}}$$
+
+Avec :
+
+- $\text{Raster}_{\text{ET}}$ : le raster en sortie des valeurs d'écart-type ([voir 3.1](#31-calcul-des-valeurs-décart-type))
+- $a = 6$ : le coefficient de pente de la sigmoïde.
+Le paramètre par défaut **a = 6** détermine la brutalité de la transition ; plus a est grand, plus la transition est abrupte, plus les zones de transition sont petites. **6** a été choisi pour obtenir un lissage très différencié.
+- $k = 4$ : la valeur d'écart-type dans les zones de transition.
+Le paramètre par défaut **k** correspond au seuil autour duquel la sigmoïde bascule de 0 vers 1, c'est-à-dire, où la transition entre le lissage fort et l'absence de lissage commence.
+
+Raster en sortie : **Raster normalisé ($\text{Raster}_{\text{normalisé}}$) entre 0 et 1**
+
+Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape finale de la combinaison.
+
+---
+
+## 3.3 Lissage général du MNT
+
+Lissage du MNT, qui sera utilisé pour la combinaison finale
+
+Outil utilisé : **Statistiques focales**
+
+- lisser uniformément le MNT 
+
+Paramètres :
+- Type de voisinage : **CERCLE**
+- Rayon : **15** (valeur modifiable)
+- Type d'unité : **cellule**
+- Type de statistiques : **Moyenne**
+
+Sortie : **$\text{MNT}_{\text{lissé}}$**
+
+---
+
+## 3.4 Pondération adaptative des MNT lissé et non lissé et combinaison
+
+Outil utilisé : **Calculatrice Raster**
+
+Principe : 
+Applique un lissage différencié sur l'entièreté du MNT choisi en entrée, selon le relief ; les zones plates sont fortement lissées tandis que les zones montagneuses ne le sont pas.
+
+Méthode : 
+La combinaison finale repose sur la pondération suivante : 
+
+$$\text{MNT}_{\text{final}} = A \cdot C + (1 - C) \cdot B$$
+
+Avec :
+- A : **$\text{MNT}_{\text{origine}}$**  
+- B : **$\text{MNT}_{\text{lissé}}$** ([voir 3.3](#33-lissage-général-du-mnt))
+- C : **$\text{Raster}_{\text{normalisé}}$** (valeurs entre 0 et 1) ([voir 3.2](#32-normalisation-des-valeurs-décart-type-par-une-fonction-sigmoïde))
+
+Interprétation :
+
+- Lorsque $C \approx 1$ (fort relief) → le MNT non lissé domine
+- Lorsque $C \approx 0$ (faible relief) → le MNT lissé domine
+- Entre les deux → transition progressive contrôlée par la sigmoïde
+
+Raster en sortie : **$\text{MNT}_{\text{lissé de manière différencielle}}$**
