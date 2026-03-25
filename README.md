@@ -20,7 +20,7 @@ Le traitement comprend les étapes suivantes :
 | Paramètre | Description |
 |---|---|
 | MNT en entrée | Raster représentant le modèle numérique de terrain à lisser |
-| Taille de rééchentillonage (en mètres) | Raster avec une nouvelle grille de pixels de la taille rentrée en paramètres, avec des valeurs attribués en fonction des plus proche voisin |
+| Taille de rééchantillonage (en mètres) | Raster avec une nouvelle grille de pixels de la taille rentrée en paramètres, avec des valeurs attribués en fonction des plus proche voisin |
 | MNT calculé de l'écart-type en sortie | Raster avec les valeurs d'écart type pour chaque pixel : différence avec la valeur moyenne des cellules dans un voisinage défini |
 | Rayon pour l'écart type | Définit la taille du voisinage circulaire (en pixel) utilisé autour de chaque pixel pour calculer l'écart-type |
 | Raster avec valeurs d'écart-type normalisées par une fonction sigmoïde en sortie | Raster des valeurs d'écarts-types normalisées entre 0 et 1 |
@@ -39,7 +39,24 @@ Le processus de lissage différencié du MNT est composé de plusieurs étapes.
 
 ---
 
-## 3.1 Calcul des valeurs d'écart-type
+## 3.1 Rééchantillonage 
+
+La première étape consiste à **Rééchantillonnage du Raster en entrée**.
+
+Outil utilisé :  **Rééchantillonnage**
+
+Objectifs :
+
+- Changer la taille des pixels du raster.
+- Attribuer une nouvelle valeur à tous les nouveaux pixels en fonction des pixels voisins avec la méthode "NEAREST"
+
+Paramètres :
+- X & Y : **2,5** (modifiable)
+- Méthode de rééchantillonage : **Nearest**
+
+Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}$)**
+
+## 3.2 Calcul des valeurs d'écart-type
 
 La première étape consiste à **calculer les valeurs d'écart-type**.
 
@@ -61,7 +78,7 @@ Raster en sortie : **Raster de valeurs d'écart-type ($\text{Raster}_{\text{ET}}
 
 ---
 
-## 3.2 Normalisation des valeurs d'écart type par une fonction sigmoïde
+## 3.3 Normalisation des valeurs d'écart type par une fonction sigmoïde
 
 Les valeurs d'écart type sont normalisées entre 0 et 1. La sigmoïde transforme les valeurs d'écart type en un gradient continu entre 0 et 1.
 
@@ -83,7 +100,7 @@ Il sera ensuite utilisé comme **coefficient de pondération** dans l'étape fin
 
 ---
 
-## 3.3 Lissage général du MNT
+## 3.4 Lissage général du MNT
 
 Lissage du MNT, qui sera utilisé pour la combinaison finale
 
@@ -101,7 +118,7 @@ Sortie : **$\text{MNT}_{\text{lissé}}$**
 
 ---
 
-## 3.4 Pondération adaptative des MNT lissé et non lissé et combinaison
+## 3.5 Pondération adaptative des MNT lissé et non lissé et combinaison
 
 Outil utilisé : **Calculatrice Raster**
 
